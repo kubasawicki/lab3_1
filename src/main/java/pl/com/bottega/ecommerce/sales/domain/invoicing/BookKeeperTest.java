@@ -33,11 +33,11 @@ public class BookKeeperTest {
 	public void setUp() {
 		bookKeeper=new BookKeeper(new InvoiceFactory());
 		clientData=new Client().generateSnapshot();
-		productData=new ProductDataBuilder().productData().withId(new Id("1")).withName("produkt").withPrice(money).withSnapshotDate(new Date()).build();
+		productData=new ProductDataBuilder().productData().build();
 		taxPolicy=mock(TaxPolicy.class);
 		invoiceRequest=new InvoiceRequest(clientData);
 		money=new Money(new BigDecimal(100), Currency.getInstance(Locale.UK));
-		when(taxPolicy.calculateTax(any(ProductType.class), any(Money.class))).thenReturn(new Tax(money, ""));
+		when(taxPolicy.calculateTax(productData.getType(), money)).thenReturn(new Tax(money, ""));
 		
 	}
 	@Test

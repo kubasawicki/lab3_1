@@ -77,8 +77,9 @@ public class AddProductCommandHandlerTest {
 
 	@Test
 	public void MethodWithTwoCommandShouldCallSaveMethodTwoTimes() {
-		AddProductCommand addProductCommand = new AddProductCommand(new Id("1"), new Id("1"), 1);
-		AddProductCommand addProductCommand2 = new AddProductCommand(new Id("1"), new Id("1"), 1);
+		int quantity = 1;
+		AddProductCommand addProductCommand = new AddProductCommand(anyId(), anyId(), quantity);
+		AddProductCommand addProductCommand2 = new AddProductCommand(anyId(), anyId(), quantity);
 		when(product.isAvailable()).thenReturn(true);
 		addProductCommandHandler.handle(addProductCommand);
 		addProductCommandHandler.handle(addProductCommand2);
