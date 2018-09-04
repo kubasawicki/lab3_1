@@ -21,46 +21,55 @@ import pl.com.bottega.ecommerce.sales.domain.reservation.ReservationRepository;
 import pl.com.bottega.ecommerce.system.application.SystemContext;
 
 public class AddProductCommandHandlerTest {
-	AddProductCommandHandler addProductCommandHandler;
+	private AddProductCommandHandler addProductCommandHandler;
 	private ReservationRepository reservationRepository;
-	ProductRepository productRepository;
-	SuggestionService suggestionService;
-	ClientRepository clientRepository;
-	SystemContext systemContext;
-	Reservation reservation;
-	Product product;
-	Client client;
-	Field field;
+	private ProductRepository productRepository;
+	private SuggestionService suggestionService;
+	private ClientRepository clientRepository;
+	private SystemContext systemContext;
+	private Reservation reservation;
+	private Product product;
+	private Client client;
+	private Field field;
 
 	@Before
 	public void setUp() {
 		reservationRepository = mock(ReservationRepository.class);
 		productRepository = mock(ProductRepository.class);
-		suggestionService = mock(SuggestionService.class);
+		mock(SuggestionService.class);
 		clientRepository = mock(ClientRepository.class);
 		reservation = mock(Reservation.class);
 		product = mock(Product.class);
 		client = mock(Client.class);
 		addProductCommandHandler = new AddProductCommandHandler();
-
-		try {
-			field = AddProductCommandHandler.class.getDeclaredField("reservationRepository");
-			field.setAccessible(true);
-			field.set(addProductCommandHandler, reservationRepository);
-			field = AddProductCommandHandler.class.getDeclaredField("productRepository");
-			field.setAccessible(true);
-			field.set(addProductCommandHandler, productRepository);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		when(reservationRepository.load(any(Id.class))).thenReturn(reservation);
-		when(productRepository.load(any(Id.class))).thenReturn(product);
-		when(clientRepository.load(any(Id.class))).thenReturn(client);
+		accessToPrivateMembers();
+ 		when(reservationRepository.load(anyId())).thenReturn(reservation);
+ 		when(productRepository.load(anyId())).thenReturn(product);
+ 		when(clientRepository.load(anyId())).thenReturn(client);
 	}
+	
+	private Id anyId() {
+ 		return new Id("1");
+ 	}
+
+ 	private void accessToPrivateMembers() {
+ 		try {
+ 			field = AddProductCommandHandler.class.getDeclaredField("reservationRepository");
+ 			field.setAccessible(true);
+ 			field.set(addProductCommandHandler, reservationRepository);
+ 			field = AddProductCommandHandler.class.getDeclaredField("productRepository");
+ 			field.setAccessible(true);
+ 			field.set(addProductCommandHandler, productRepository);
+ 		} catch (Exception e) {
+ 			e.printStackTrace();
+ 		}
+ 	}
 
 	@Test
 	public void MethodWithTwoCommandShouldCallSaveMethodOneTime() {
-		AddProductCommand addProductCommand = new AddProductCommand(new Id("1"), new Id("1"), 1);
+		int quantity = 1;
+		AddProductCommand addProductCommand = new AddProductCommand(anyId(), anyId(), quantity);
+ 		AddProductCommand addProductCommand2 = new AddProductCommand(anyId(), anyId(), quantity);
 		when(product.isAvailable()).thenReturn(true);
 		addProductCommandHandler.handle(addProductCommand);
 		verify(reservationRepository, times(1)).save(reservation);

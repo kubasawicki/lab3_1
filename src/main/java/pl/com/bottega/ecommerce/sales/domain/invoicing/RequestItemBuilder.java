@@ -6,7 +6,7 @@ package pl.com.bottega.ecommerce.sales.domain.invoicing;
  public class RequestItemBuilder {
  	private ProductData productData;
 
- 	private int quantity;
+ 	private int quantity = 1;
 
  	private Money totalCost;
  	
