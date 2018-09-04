@@ -69,4 +69,11 @@ package lab3_1;
  		Invoice invoice=bookKeeper.issuance(invoiceRequest, tax);	
  		verify(productData, times(2)).getType();
  	}
+ 	
+ 	@Test
+ 	public void RequestIssuanceWithoutParametersShouldntCallAnyMethod() {
+ 		Invoice invoice=bookKeeper.issuance(invoiceRequest, taxPolicy);	
+ 		verify(productData, times(0)).getType();
+ 	}
+ 	
  }
